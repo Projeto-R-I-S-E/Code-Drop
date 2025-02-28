@@ -38,7 +38,7 @@ function App() {
           </form>
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <h2 className="text-xl font-bold">Compartilhar código</h2>
-            <p><a href={link}>exemplo de link</a></p>
+            <p><a href={link}>{link}</a></p>
             <br />
             <button onClick={() => setIsModalOpen(false)}>Fechar</button>
           </Modal>

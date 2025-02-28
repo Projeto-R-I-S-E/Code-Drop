@@ -22,17 +22,10 @@ def submit():
     data = request.get_json()
     text = data.get('text')
 
-    page_id = str(uuid.uuid4())
-    pages[page_id] = text
+    page_id = str(uuid.uuid4())  # Gerar um ID único para a página
+    pages[page_id] = text  # Armazenar o texto
 
-    return jsonify({'link': f'http://localhost:5000/view/{page_id}'})
-
-@app.route('/view/<page_id>')
-def view_page(page_id):
-    text = pages.get(page_id)
-    if text:
-        return render_template('code.html', text=text)
-    return "Página não encontrada", 404
+    return jsonify({'link': f'http://localhost:5173/view/{page_id}'})  # Link que o frontend vai acessar
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
@@ -40,10 +33,6 @@ def get_text(page_id):
     if text:
         return jsonify({'text': text})
     return jsonify({'error': 'Página não encontrada'}), 404
-
-@app.route('/assets/<path:filename>')
-def serve_static(filename):
-    return send_from_directory(os.path.join(static_folder, 'assets'), filename)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

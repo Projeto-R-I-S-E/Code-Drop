@@ -33,6 +33,6 @@ function ViewCode() {
       )}
     </div>
   );
-};
+}
 
 export default ViewCode;
