@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchHello } from "./services/Api";
+import { fetchHello, sendData } from "./services/Api";
 import Modal from "./modal";
 
 function App() {
@@ -11,6 +11,16 @@ function App() {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [text, setText] = useState('');
+  const [link, setLink] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const response = await sendData(text);
+    setLink(response.link); 
+    setIsModalOpen(true);
+  };
+
   return (
     <>
       <header className="p-6">
@@ -19,15 +29,16 @@ function App() {
       </header>
       <main className="w-full">
         <div className="flex gap-48">
-          <form action={() => setIsModalOpen(true)} method="post">  
+          <form onSubmit={handleSubmit} method="post">  
             <textarea name="codigo" id="codigo" cols="70" rows="15" 
+            value={text} onChange={(e) => setText(e.target.value)}
             className="border-solid border-gray-300 text-2xl resize-none" placeholder="Digite seu código" required></textarea>
             <br />
             <input type="submit" value="Enivar código" className="mt-4 p-2 bg-blue-500 text-white rounded"/>
           </form>
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <h2 className="text-xl font-bold">Compartilhar código</h2>
-            <p><a href="">exemplo de link</a></p>
+            <p><a href={link}>exemplo de link</a></p>
             <br />
             <button onClick={() => setIsModalOpen(false)}>Fechar</button>
           </Modal>

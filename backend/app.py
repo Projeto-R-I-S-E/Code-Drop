@@ -1,12 +1,49 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
+import uuid
+import os
 
-app = Flask(__name__)
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+static_folder = os.path.join(project_root, 'frontend', 'dist')
+template_folder = os.path.join(project_root, 'frontend', 'templates')
+
+app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
 
+pages = {}
+
+# Rota de teste da API
 @app.route('/api/hello', methods=['GET'])
 def hello():
     return jsonify({'message': 'Teste do backend (vai sair daqui)'})
+
+@app.route('/api/submit', methods=['POST'])
+def submit():
+    data = request.get_json()
+    text = data.get('text')
+
+    page_id = str(uuid.uuid4())
+    pages[page_id] = text
+
+    return jsonify({'link': f'http://localhost:5000/view/{page_id}'})
+
+@app.route('/view/<page_id>')
+def view_page(page_id):
+    text = pages.get(page_id)
+    if text:
+        return render_template('code.html', text=text)
+    return "Página não encontrada", 404
+
+@app.route('/api/get_text/<page_id>', methods=['GET'])
+def get_text(page_id):
+    text = pages.get(page_id)
+    if text:
+        return jsonify({'text': text})
+    return jsonify({'error': 'Página não encontrada'}), 404
+
+@app.route('/assets/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(os.path.join(static_folder, 'assets'), filename)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
