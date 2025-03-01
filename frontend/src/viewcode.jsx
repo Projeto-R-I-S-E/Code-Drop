@@ -7,7 +7,7 @@ function ViewCode() {
   useEffect(() => {
     const fetchText = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/get_text/${pageId}`);
+        const response = await fetch(`code-drop-production.up.railway.app/api/get_text/${pageId}`);
         if (!response.ok) {
           throw new Error('Página não encontrada');
         }
@@ -25,7 +25,7 @@ function ViewCode() {
     <div className="container">
       {text ? (
         <>
-          <form action="http://localhost:5173/">
+          <form action="code-drop-production.up.railway.app">
             <input type="submit" value="Voltar" />
           </form>
           <h1>Código:</h1>
