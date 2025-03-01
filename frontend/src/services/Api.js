@@ -8,7 +8,7 @@ export const fetchHello = async () => {
 
 export const sendData = async (text) => {
   try {
-    const response = await fetch('http://localhost:5000/api/submit', {
+    const response = await fetch('${API_URL}/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -17,6 +17,14 @@ pages = {}
 def hello():
     return jsonify({'message': 'Teste do backend (vai sair daqui)'})
 
+@app.route('/')
+def serve_frontend():
+    return app.send_static_file('index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return app.send_static_file(path)
+
 @app.route('/api/submit', methods=['POST'])
 def submit():
     data = request.get_json()
@@ -25,7 +33,9 @@ def submit():
     page_id = str(uuid.uuid4())  
     pages[page_id] = text  
 
-    return jsonify({'link': f'http://localhost:5173/view/{page_id}'})  
+    backend_url = 'code-drop-production.up.railway.app'
+
+    return jsonify({'link': f'{backend_url}/view/{page_id}'})  
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
