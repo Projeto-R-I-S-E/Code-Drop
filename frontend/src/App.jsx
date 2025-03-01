@@ -30,7 +30,7 @@ function App() {
       <main className="w-full">
         <div className="flex gap-48">
           <form onSubmit={handleSubmit} method="post">  
-            <textarea name="codigo" id="codigo" cols="70" rows="15" 
+            <textarea name="code" id="code" cols="70" rows="15" 
             value={text} onChange={(e) => setText(e.target.value)}
             className="border-solid border-gray-300 text-2xl resize-none" placeholder="Digite seu código" required></textarea>
             <br />

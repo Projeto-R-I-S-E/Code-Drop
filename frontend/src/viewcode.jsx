@@ -25,8 +25,12 @@ function ViewCode() {
     <div className="container">
       {text ? (
         <>
-          <h1>Texto Inserido</h1>
-          <p>{text}</p>
+          <form action="http://localhost:5173/">
+            <input type="submit" value="Voltar" />
+          </form>
+          <h1>Código:</h1>
+          <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
+          className="border-solid border-gray-300 text-2xl resize-none"></textarea>
         </>
       ) : (
         <p>Carregando...</p>
