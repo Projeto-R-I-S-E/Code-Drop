@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://code-drop-production.up.railway.app/api';
 
 export const fetchHello = async () => {
   const response = await fetch(`${API_URL}/hello`);
@@ -21,7 +21,7 @@ export const sendData = async (text) => {
     }
 
     const data = await response.json();
-    return data; // Retorna o link gerado pelo Flask
+    return data;
   } catch (error) {
     console.error(error);
   }
