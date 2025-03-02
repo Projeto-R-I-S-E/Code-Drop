@@ -16,6 +16,14 @@ function App() {
     setIsModalOpen(true);
   };
 
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); // Remove a mensagem após 2 segundos
+  };
+
   return (
     <>
       <header className="p-6">
@@ -35,9 +43,9 @@ function App() {
             <p><a href={link} id="linktext">{link}</a></p>
             <br />
             <button onClick={() => setIsModalOpen(false)}>Fechar</button>
-            <button onClick={() => {navigator.clipboard.writeText(link);}}>
-              Copiar Link
-            </button>
+            <button onClick={handleCopy}>
+              {copied ? "Copiado!" : "Copiar Link"}
+          </button>
           </Modal>
           <div className="border-solid border-gray-200 w-full p-10">
             <h2 className="text-4xl font-bold text-blue-500 m-0">Listagem de links</h2>
