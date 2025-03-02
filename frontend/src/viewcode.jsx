@@ -7,7 +7,7 @@ function ViewCode() {
   useEffect(() => {
     const fetchText = async () => {
       try {
-        const response = await fetch(`code-drop-production.up.railway.app/api/get_text/${pageId}`);
+        const response = await fetch(`https://drop-code.netlify.app/api/get_text/${pageId}`);
         if (!response.ok) {
           throw new Error('Página não encontrada');
         }
