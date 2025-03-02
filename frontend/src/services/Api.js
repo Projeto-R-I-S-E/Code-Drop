@@ -1,4 +1,4 @@
-const API_URL = 'https://code-drop-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchHello = async () => {
   const response = await fetch(`${API_URL}/hello`);
@@ -8,7 +8,7 @@ export const fetchHello = async () => {
 
 export const sendData = async (text) => {
   try {
-    const response = await fetch('${API_URL}/submit', {
+    const response = await fetch(`${API_URL}/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
