@@ -25,9 +25,9 @@ def submit():
     page_id = str(uuid.uuid4())  
     pages[page_id] = text  
 
-    backend_url = 'code-drop-production.up.railway.app'
+    frontend_url = 'https://drop-code.netlify.app'
 
-    return jsonify({'link': f'{backend_url}/view/{page_id}'})  
+    return jsonify({'link': f'{frontend_url}/view/{page_id}'})  
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):

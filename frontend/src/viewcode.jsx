@@ -25,7 +25,7 @@ function ViewCode() {
     <div className="container">
       {text ? (
         <>
-          <form action="code-drop-production.up.railway.app">
+          <form action="https://drop-code.netlify.app/">
             <input type="submit" value="Voltar" />
           </form>
           <h1>Código:</h1>
