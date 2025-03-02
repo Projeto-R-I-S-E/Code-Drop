@@ -12,11 +12,6 @@ CORS(app)
 
 pages = {}
 
-# Rota de teste da API
-@app.route('/api/hello', methods=['GET'])
-def hello():
-    return jsonify({'message': 'Teste do backend (vai sair daqui)'})
-
 @app.route('/api/submit', methods=['POST'])
 def submit():
     data = request.get_json()

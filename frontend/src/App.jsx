@@ -3,11 +3,6 @@ import { fetchHello, sendData } from "./services/Api";
 import Modal from "./modal";
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    fetchHello().then(data => setMessage(data.message));
-  }, []);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -25,7 +20,6 @@ function App() {
     <>
       <header className="p-6">
         <h1 className="text-5xl font-bold text-blue-500">Início do projeto</h1>
-        <h2 className="text-4xl font-bold text-blue-500">{message}</h2>
       </header>
       <main className="w-full">
         <div className="flex gap-48">
@@ -41,6 +35,7 @@ function App() {
             <p><a href={link}>{link}</a></p>
             <br />
             <button onClick={() => setIsModalOpen(false)}>Fechar</button>
+            <button>Copiar link</button>
           </Modal>
           <div className="border-solid border-gray-200 w-full p-10">
             <h2 className="text-4xl font-bold text-blue-500 m-0">Listagem de links</h2>
