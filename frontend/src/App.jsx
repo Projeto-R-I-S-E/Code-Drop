@@ -16,21 +16,6 @@ function App() {
     setIsModalOpen(true);
   };
 
-  const [copied, setCopied] = useState(false);
-  
-  const handleCopy = async () => {
-    const textToCopy = document.getElementById("linkText").innerText;
-    
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      setCopied(true);
-
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Falha ao copiar:", err);
-    }
-  };
-
   return (
     <>
       <header className="p-6">
@@ -50,8 +35,8 @@ function App() {
             <p><a href={link} id="linktext">{link}</a></p>
             <br />
             <button onClick={() => setIsModalOpen(false)}>Fechar</button>
-            <button onClick={handleCopy}>
-              {copied ? "Copiado!" : "copiar link"}
+            <button onClick={() => {navigator.clipboard.writeText(link);}}>
+              Copiar Link
             </button>
           </Modal>
           <div className="border-solid border-gray-200 w-full p-10">
