@@ -34,7 +34,8 @@ def get_text(page_id):
     text = pages.get(page_id)
     if text:
         return jsonify({'text': text})
-    return jsonify({'error': 'Página não encontrada'}), 404
+    else:
+        return jsonify({'error': 'Página não encontrada'}), 404
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
