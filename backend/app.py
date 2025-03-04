@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import uuid
 import os
+from flask_sqlalchemy import SQLAlchemy
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 static_folder = os.path.join(project_root, 'frontend', 'dist')
@@ -10,8 +11,14 @@ template_folder = os.path.join(project_root, 'frontend', 'templates')
 app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
 
+#configuração db
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 pages = {}
 
+#rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
 def submit():
     data = request.get_json()

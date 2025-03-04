@@ -12,7 +12,6 @@ const Header = () => {
                 <form action="https://drop-code.netlify.app/signup">
                     <input type="submit" value="SIGN UP" className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
                 </form>
-                
             </div>
         </header>
     )
