@@ -6,10 +6,10 @@ const Header = () => {
                 <h1 className="text-white h-fit m-0">CODE-DROP</h1>
             </div>
             <div className="flex gap-4">
-                <form action="/login">
+                <form action="https://drop-code.netlify.app/login">
                     <input type="submit" value="LOGIN" className="bg-Backgrond pl-4 pr-4 pt-1 pb-1 border-white text-white"/>
                 </form>
-                <form action="/signup">
+                <form action="https://drop-code.netlify.app/signup">
                     <input type="submit" value="SIGN UP" className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
                 </form>
                 
