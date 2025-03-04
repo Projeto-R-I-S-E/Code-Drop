@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Header from './componentes/header'
 
 function ViewCode() {
   const [text, setText] = useState(null);
@@ -22,20 +23,23 @@ function ViewCode() {
   }, [pageId]);
 
   return (
-    <div className="container">
-      {text ? (
-        <>
-          <form action="https://drop-code.netlify.app/">
-            <input type="submit" value="Voltar" />
-          </form>
-          <h1>Código:</h1>
-          <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
-          className="border-solid border-gray-300 text-2xl resize-none"></textarea>
-        </>
-      ) : (
-        <p>Carregando...</p>
-      )}
-    </div>
+    <>
+      <Header></Header>
+      <div className="container">
+        {text ? (
+          <>
+            <form action="https://drop-code.netlify.app/">
+              <input type="submit" value="Voltar" />
+            </form>
+            <h1>Código:</h1>
+            <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
+            className="border-solid border-gray-300 text-2xl resize-none"></textarea>
+          </>
+        ) : (
+          <p>Carregando...</p>
+        )}
+      </div>
+    </>
   );
 }
 

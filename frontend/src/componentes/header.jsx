@@ -6,8 +6,13 @@ const Header = () => {
                 <h1 className="text-white h-fit m-0">CODE-DROP</h1>
             </div>
             <div className="flex gap-4">
-                <button className="bg-Backgrond pl-4 pr-4 pt-1 pb-1 border-white text-white">LOGIN</button>
-                <button className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond">SING UP</button>
+                <form action="/login">
+                    <input type="submit" value="LOGIN" className="bg-Backgrond pl-4 pr-4 pt-1 pb-1 border-white text-white"/>
+                </form>
+                <form action="/signup">
+                    <input type="submit" value="SIGN UP" className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
+                </form>
+                
             </div>
         </header>
     )
