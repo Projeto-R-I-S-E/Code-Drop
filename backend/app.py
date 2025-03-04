@@ -12,12 +12,9 @@ app = Flask(__name__, static_folder=static_folder, template_folder=template_fold
 CORS(app)
 
 #configuração db
-database_url = os.getenv("DATABASE_URL")
-if not database_url:
-    raise RuntimeError("A variável de ambiente DATABASE_URL não está definida.")
-
-app.config["SQLALCHEMY_DATABASE_URI"] = database_url
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 pages = {}
 
