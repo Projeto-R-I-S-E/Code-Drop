@@ -11,7 +11,15 @@ template_folder = os.path.join(project_root, 'frontend', 'templates')
 app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
 
-#confiuração db
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+from models import *
+
+with app.app_context():
+    db.create_all()
 
 pages = {}
 
