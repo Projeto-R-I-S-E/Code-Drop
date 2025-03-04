@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { sendData } from "./services/Api";
 import Modal from "./modal";
+import Header from "./componentes/header"
 
 function App() {
   
@@ -21,14 +22,12 @@ function App() {
   const handleCopy = () => {
     navigator.clipboard.writeText(link);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000); // Remove a mensagem após 2 segundos
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <>
-      <header className="p-6">
-        <h1 className="text-5xl font-bold text-blue-500">Início do projeto</h1>
-      </header>
+      <Header></Header>
       <main className="w-full">
         <div className="flex gap-48">
           <form onSubmit={handleSubmit} method="post">  
