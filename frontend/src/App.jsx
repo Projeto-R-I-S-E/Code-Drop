@@ -28,7 +28,7 @@ function App() {
   return (
     <>
       <Header></Header>
-      <main className="w-full">
+      <main className="m-10">
         <div className="flex gap-48">
           <form onSubmit={handleSubmit} method="post">  
             <textarea name="code" id="code" cols="70" rows="15" 
