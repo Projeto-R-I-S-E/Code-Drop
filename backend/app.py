@@ -12,16 +12,6 @@ app = Flask(__name__, static_folder=static_folder, template_folder=template_fold
 CORS(app)
 
 #confiuração db
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
-
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db = SQLAlchemy(app)
-from models import *
 
 pages = {}
 
