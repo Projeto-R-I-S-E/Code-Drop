@@ -80,43 +80,46 @@ def login():
 @app.route('/api/submit', methods=['POST'])
 @jwt_required()  # Garante que a requisição é feita por um usuário logado
 def submit():
-    data = request.get_json()
-    text = data.get('text')
+    try:
+        data = request.get_json()
+        text = data.get('text')
 
-    if not text:
-        return jsonify({'error': 'Texto não pode ser vazio'}), 400
+        if not text:
+            return jsonify({'error': 'Texto não pode ser vazio'}), 400
 
-    # Gerar um ID único para o link
-    page_id = str(uuid.uuid4())  
-    
-    # Verificar se o usuário está autenticado
-    user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado
+        # Gerar um ID único para o link
+        page_id = str(uuid.uuid4())  
 
-    if not user_email:
-        return jsonify({'error': 'Usuário não autenticado'}), 401
+        # Verificar se o usuário está autenticado
+        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado
+        if not user_email:
+            return jsonify({'error': 'Usuário não autenticado'}), 401
 
-    # Salvar o link no banco de dados
-    user = Usuario.query.filter_by(email=user_email).first()
-    if not user:
-        return jsonify({'error': 'Usuário não encontrado'}), 404
+        # Buscar o usuário no banco de dados
+        user = Usuario.query.filter_by(email=user_email).first()
+        if not user:
+            return jsonify({'error': 'Usuário não encontrado'}), 404
 
-    # Criar o link no banco de dados
-    new_link = Link(id=page_id, url=text, user_id=user.id)
-    db.session.add(new_link)
-    db.session.commit()
+        # Criar o link no banco de dados
+        new_link = Link(id=page_id, url=text, user_id=user.id)
+        db.session.add(new_link)
+        db.session.commit()
 
-    # Gerar a URL do link
-    frontend_url = f'https://drop-code.netlify.app/view/{page_id}'
+        # Gerar a URL do link
+        frontend_url = f'https://drop-code.netlify.app/view/{page_id}'
 
-    return jsonify({'link': frontend_url}), 200
+        return jsonify({'link': frontend_url}), 200
+
+    except Exception as e:
+        # Captura qualquer erro e retorna uma resposta de erro genérica com o texto do erro
+        print(f"Erro ao processar a requisição: {e}")
+        return jsonify({'error': 'Erro interno do servidor'}), 500
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    # Tentar encontrar o link no banco de dados pelo ID
-    link = Link.query.filter_by(id=page_id).first()
-
-    if link:
-        return jsonify({'text': link.url})  # Retorna o texto associado ao link
+    text = pages.get(page_id)
+    if text:
+        return jsonify({'text': text})
     else:
         return jsonify({'error': 'Página não encontrada'}), 404
 

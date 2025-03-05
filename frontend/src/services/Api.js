@@ -1,15 +1,13 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_BASE_URL = "https://code-drop-production.up.railway.app/api";
 
-export const sendData = async (text) => {
+export const sendData = async (text, token) => {
   try {
-    const token = localStorage.getItem('token');  // Recupera o token JWT do localStorage
-
     const response = await fetch(`${API_URL}/submit`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : '',  // Envia o token no cabeçalho, caso exista
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,  // Passando o token JWT no cabeçalho
       },
       body: JSON.stringify({ text }),
     });
@@ -21,8 +19,8 @@ export const sendData = async (text) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Erro ao enviar dados:', error);
-    return { error: error.message };  // Retorna o erro caso aconteça
+    console.error(error);
+    throw new Error('Erro ao enviar dados');
   }
 };
 
