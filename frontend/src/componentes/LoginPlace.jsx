@@ -24,13 +24,10 @@ const LoginPlace = () => {
         return !!localStorage.getItem("token"); // Se houver token, está logado
     };
     const logout = () => {
-        localStorage.removeItem("token");
-        if(isUserLoggedIn() == True){
+        if (localStorage.getItem("token")) { // Verifica se o usuário está logado
+            localStorage.removeItem("token"); // Remove o token
             alert("Você saiu da conta!");
-        } else{
-            alert("Você ainda não fez login")
         }
-        
     };
 
     return (
@@ -66,7 +63,7 @@ const LoginPlace = () => {
             </>
             }
             <form action="https://drop-code.netlify.app/login">
-                <input type="submit" onClick={logout} value="Sair" />
+                <input type="submit" onClick={logout} disabled={!localStorage.getItem("token")} value="Sair" />
             </form>
         </div>
     );
