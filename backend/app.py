@@ -4,7 +4,7 @@ import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import JWTManager,  create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager,  create_access_token
 from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -78,42 +78,16 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
-@jwt_required()  # Garante que a requisição é feita por um usuário logado
 def submit():
-    try:
-        data = request.get_json()
-        text = data.get('text')
+    data = request.get_json()
+    text = data.get('text')
 
-        if not text:
-            return jsonify({'error': 'Texto não pode ser vazio'}), 400
+    page_id = str(uuid.uuid4())  
+    pages[page_id] = text  
 
-        # Gerar um ID único para o link
-        page_id = str(uuid.uuid4())  
+    frontend_url = 'https://drop-code.netlify.app'
 
-        # Verificar se o usuário está autenticado
-        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado
-        if not user_email:
-            return jsonify({'error': 'Usuário não autenticado'}), 401
-
-        # Buscar o usuário no banco de dados
-        user = Usuario.query.filter_by(email=user_email).first()
-        if not user:
-            return jsonify({'error': 'Usuário não encontrado'}), 404
-
-        # Criar o link no banco de dados
-        new_link = Link(id=page_id, url=text, user_id=user.id)
-        db.session.add(new_link)
-        db.session.commit()
-
-        # Gerar a URL do link
-        frontend_url = f'https://drop-code.netlify.app/view/{page_id}'
-
-        return jsonify({'link': frontend_url}), 200
-
-    except Exception as e:
-        # Captura qualquer erro e retorna uma resposta de erro genérica com o texto do erro
-        print(f"Erro ao processar a requisição: {e}")
-        return jsonify({'error': 'Erro interno do servidor'}), 500
+    return jsonify({'link': f'{frontend_url}/view/{page_id}'})  
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
