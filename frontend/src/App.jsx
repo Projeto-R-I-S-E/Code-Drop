@@ -52,8 +52,8 @@ function App() {
             <a href="" className="text-2xl mt-5">exemplo</a>
           </div>
         </div>
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 }
