@@ -23,6 +23,10 @@ const LoginPlace = () => {
     const isUserLoggedIn = () => {
         return !!localStorage.getItem("token"); // Se houver token, está logado
     };
+    const logout = () => {
+        localStorage.removeItem("token");
+        alert("Você saiu da conta!");
+    };
 
     return (
         <div className='border-solid w-2/4 h-96 flex flex-col justify-center items-center gap-5'>
@@ -51,6 +55,7 @@ const LoginPlace = () => {
                     type="submit" 
                     value="Enviar"
                 />
+                <button onClick={logout}>Sair</button>
             </form>
         </div>
     );
