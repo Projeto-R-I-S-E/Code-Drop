@@ -52,7 +52,7 @@ const SignUpPlace = () => {
                         value={senha} 
                         onChange={(e) => setSenha(e.target.value)} 
                     />
-                    <input type="submit" value="Enviar" className="cursor-pointer" />
+                    <input type="submit" value="Enviar" />
                 </form>
             </div>
         </>
