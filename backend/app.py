@@ -4,7 +4,7 @@ import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, create_access_token
 from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
