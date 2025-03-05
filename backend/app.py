@@ -58,18 +58,11 @@ def register():
     return jsonify({'message': 'Usuário cadastrado com sucesso!'}), 201
 
 # Rota de Login
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.json
-    email = data.get('email')
-    senha = data.get('senha')
-
+def verificar_login(email, senha_digitada):
     usuario = Usuario.query.filter_by(email=email).first()
-
-    if not usuario or not check_password_hash(usuario.senha, senha):
-        return jsonify({'error': 'Credenciais inválidas!'}), 401
-
-    return jsonify({'message': 'Login bem-sucedido!', 'user': {'id': usuario.id, 'email': usuario.email}}), 200
+    if usuario and check_password_hash(usuario.senha, senha_digitada):
+        return True 
+    return False 
 
 
 #rotas para gerar urls
