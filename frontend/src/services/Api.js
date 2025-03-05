@@ -3,22 +3,34 @@ const API_BASE_URL = "https://code-drop-production.up.railway.app/api";
 
 export const sendData = async (text) => {
   try {
+    // Recupera o token JWT do localStorage
+    const token = localStorage.getItem('token'); 
+
+    // Verifica se o token está presente
+    if (!token) {
+      throw new Error('Token de autenticação não encontrado');
+    }
+
+    // Envia a requisição para o backend
     const response = await fetch(`${API_URL}/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,  // Envia o token no cabeçalho
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text }),  // Envia o texto
     });
 
     if (!response.ok) {
       throw new Error('Erro na requisição');
     }
 
+    // Retorna o link gerado
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao enviar dados:", error);
+    return { error: error.message };  // Retorna o erro para ser tratado no frontend
   }
 };
 

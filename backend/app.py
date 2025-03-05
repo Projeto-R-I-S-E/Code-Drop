@@ -4,7 +4,7 @@ import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import JWTManager,  create_access_token
+from flask_jwt_extended import JWTManager,  create_access_token, jwt_required, get_jwt_identity
 from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -78,16 +78,32 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
+@jwt_required()  # Requer que o usuário esteja autenticado
 def submit():
     data = request.get_json()
     text = data.get('text')
 
-    page_id = str(uuid.uuid4())  
-    pages[page_id] = text  
+    # Verifica se o texto foi enviado
+    if not text:
+        return jsonify({'error': 'Texto não pode ser vazio'}), 400
+
+    # Obtém o email do usuário autenticado
+    user_email = get_jwt_identity()
+
+    # Recupera o usuário autenticado pelo email
+    user = Usuario.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({'error': 'Usuário não encontrado'}), 404
+
+    # Cria o link e associa ao usuário
+    page_id = str(uuid.uuid4())  # Gerar um ID único para o link
+    new_link = Link(id=page_id, url=text, user_id=user.id)
+    
+    db.session.add(new_link)
+    db.session.commit()
 
     frontend_url = 'https://drop-code.netlify.app'
-
-    return jsonify({'link': f'{frontend_url}/view/{page_id}'})  
+    return jsonify({'link': f'{frontend_url}/view/{page_id}'}), 200 
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
