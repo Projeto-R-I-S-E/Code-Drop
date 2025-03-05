@@ -78,6 +78,7 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
+@jwt_required()  # Garante que a requisição é feita por um usuário logado
 def submit():
     data = request.get_json()
     text = data.get('text')
@@ -88,35 +89,34 @@ def submit():
     # Gerar um ID único para o link
     page_id = str(uuid.uuid4())  
     
-    # Criar o link (sem salvar no banco de dados por enquanto)
-    new_link_url = f'https://drop-code.netlify.app/view/{page_id}'
-
     # Verificar se o usuário está autenticado
-    user_email = None
-    user_id = None
-    try:
-        # Tentar obter o email do token JWT (se estiver presente)
-        user_email = get_jwt_identity()
-        if user_email:
-            user = Usuario.query.filter_by(email=user_email).first()
-            user_id = user.id if user else None
-    except:
-        pass  # Se não houver token, continuamos sem o user_id
+    user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado
 
-    # Se o usuário estiver autenticado, salvar o link no banco de dados
-    if user_id:
-        new_link = Link(id=page_id, url=text, user_id=user_id)
-        db.session.add(new_link)
-        db.session.commit()
+    if not user_email:
+        return jsonify({'error': 'Usuário não autenticado'}), 401
 
-    # Retornar o link gerado (com ou sem salvar no banco de dados)
-    return jsonify({'link': new_link_url}), 200 
+    # Salvar o link no banco de dados
+    user = Usuario.query.filter_by(email=user_email).first()
+    if not user:
+        return jsonify({'error': 'Usuário não encontrado'}), 404
+
+    # Criar o link no banco de dados
+    new_link = Link(id=page_id, url=text, user_id=user.id)
+    db.session.add(new_link)
+    db.session.commit()
+
+    # Gerar a URL do link
+    frontend_url = f'https://drop-code.netlify.app/view/{page_id}'
+
+    return jsonify({'link': frontend_url}), 200
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    text = pages.get(page_id)
-    if text:
-        return jsonify({'text': text})
+    # Tentar encontrar o link no banco de dados pelo ID
+    link = Link.query.filter_by(id=page_id).first()
+
+    if link:
+        return jsonify({'text': link.url})  # Retorna o texto associado ao link
     else:
         return jsonify({'error': 'Página não encontrada'}), 404
 
