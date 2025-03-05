@@ -4,7 +4,7 @@ import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import JWTManager,  create_access_token
+from flask_jwt_extended import JWTManager,  create_access_token, get_jwt_identity, jwt_required
 from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -28,8 +28,6 @@ migrate = Migrate(app, db)
 
 # Importação das models
 from models import *
-
-pages = {}
 
 app.config["JWT_SECRET_KEY"] = "your_secret_key"
 jwt = JWTManager(app)
@@ -78,22 +76,46 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
+@jwt_required(optional=True)  # Permite que usuários não autenticados enviem códigos
 def submit():
     data = request.get_json()
     text = data.get('text')
-
-    page_id = str(uuid.uuid4())  
-    pages[page_id] = text  
+    page_id = str(uuid.uuid4())
 
     frontend_url = 'https://drop-code.netlify.app'
+    link = f'{frontend_url}/view/{page_id}'
 
-    return jsonify({'link': f'{frontend_url}/view/{page_id}'})  
+    # Verifica se o usuário está logado
+    current_user_email = get_jwt_identity()
+    user = Usuario.query.filter_by(email=current_user_email).first() if current_user_email else None
+
+    # Salva no banco de dados se o usuário estiver autenticado
+    new_link = Link(id=page_id, url=link, user_id=user.id if user else None)
+    db.session.add(new_link)
+    db.session.commit()
+
+    return jsonify({'link': link})
+
+@app.route('/api/user/links', methods=['GET'])
+@jwt_required()
+def get_user_links():
+    current_user_email = get_jwt_identity()
+    user = Usuario.query.filter_by(email=current_user_email).first()
+
+    if not user:
+        return jsonify({'error': 'Usuário não encontrado'}), 404
+
+    links = Link.query.filter_by(user_id=user.id).all()
+    links_list = [{'id': link.id, 'url': link.url} for link in links]
+
+    return jsonify({'links': links_list})
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    text = pages.get(page_id)
-    if text:
-        return jsonify({'text': text})
+    link = Link.query.filter_by(id=page_id).first()  # Busca o link no banco
+
+    if link:
+        return jsonify({'text': link.url})  # Se quiser salvar o código também, adicione um campo na model Link
     else:
         return jsonify({'error': 'Página não encontrada'}), 404
 
