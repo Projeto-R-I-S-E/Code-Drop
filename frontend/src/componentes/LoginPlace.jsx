@@ -20,11 +20,15 @@ const LoginPlace = () => {
             setError('Email ou senha inválidos!');
         }
     };
+    const isUserLoggedIn = () => {
+        return !!localStorage.getItem("token"); // Se houver token, está logado
+    };
 
     return (
         <div className='border-solid w-2/4 h-96 flex flex-col justify-center items-center gap-5'>
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 {error && <p className='text-red-500'>{error}</p>}
+                {isUserLoggedIn() ? <p>Usuário Logado</p> : <p>Faça login</p>}
                 <input 
                     type="email"
                     name="email"
