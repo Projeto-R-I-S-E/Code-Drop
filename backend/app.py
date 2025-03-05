@@ -58,11 +58,22 @@ def register():
     return jsonify({'message': 'Usuário cadastrado com sucesso!'}), 201
 
 # Rota de Login
-def verificar_login(email, senha_digitada):
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    senha = data.get('senha')
+
+    if not email or not senha:
+        return jsonify({'error': 'Email e senha são obrigatórios!'}), 400
+
     usuario = Usuario.query.filter_by(email=email).first()
-    if usuario and check_password_hash(usuario.senha, senha_digitada):
-        return True 
-    return False 
+    if usuario and check_password_hash(usuario.senha, senha):
+        # Gerar o token JWT
+        access_token = create_access_token(identity=email)
+        return jsonify({'token': access_token}), 200
+
+    return jsonify({'error': 'Email ou senha inválidos!'}), 401
 
 
 #rotas para gerar urls
