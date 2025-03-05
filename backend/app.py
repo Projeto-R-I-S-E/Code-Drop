@@ -76,6 +76,7 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
+@jwt_required(optional=True)  # Permite usuários logados e não logados
 def submit():
     try:
         data = request.get_json()
@@ -84,17 +85,20 @@ def submit():
         if not text:
             return jsonify({'error': 'Texto obrigatório!'}), 400
 
-        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado
+        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
         frontend_url = 'https://drop-code.netlify.app'
-        link = f'{frontend_url}/view/{str(uuid.uuid4())}'
+        page_id = str(uuid.uuid4())  
+        link = f'{frontend_url}/view/{page_id}'
 
-        new_link = Link(url=link, user_id=user.id if user else None)
-        db.session.add(new_link)
-        db.session.commit()
+        # Salva no banco de dados se o usuário estiver logado
+        if user:
+            new_link = Link(url=link, user_id=user.id)
+            db.session.add(new_link)
+            db.session.commit()
 
-        return jsonify({'link': new_link.url})
+        return jsonify({'link': link})
     except Exception as e:
         print("Erro no backend:", str(e))
         return jsonify({'error': 'Erro interno no servidor'}), 500
