@@ -12,6 +12,7 @@ const SignUpPlace = () => {
         const result = await registerUser(nome, email, senha);
         if (result) {
             alert("Usuário registrado com sucesso!");
+            window.location.href = '/'
         } else {
             alert("Erro ao registrar usuário.");
         }
