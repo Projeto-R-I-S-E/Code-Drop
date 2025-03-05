@@ -3,6 +3,8 @@ from flask_cors import CORS
 import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager, create_access_token
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 static_folder = os.path.join(project_root, 'frontend', 'dist')
@@ -11,7 +13,62 @@ template_folder = os.path.join(project_root, 'frontend', 'templates')
 app = Flask(__name__, static_folder=static_folder, template_folder=template_folder)
 CORS(app)
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Instância do banco de dados
+db = SQLAlchemy(app)
+
+# Importação das models
+from models import *
+
 pages = {}
+
+app.config["JWT_SECRET_KEY"] = "your_secret_key"
+jwt = JWTManager(app)
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.json
+    nome = data.get('nome')
+    email = data.get('email')
+    senha = data.get('senha')
+
+    if not nome or not email or not senha:
+        return jsonify({'error': 'Todos os campos são obrigatórios!'}), 400
+
+    # Verifica se o email já existe
+    if Usuario.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email já cadastrado!'}), 400
+
+    # Hash da senha antes de salvar
+    hashed_password = generate_password_hash(senha)
+
+    novo_usuario = Usuario(nome=nome, email=email, senha=hashed_password)
+    db.session.add(novo_usuario)
+    db.session.commit()
+
+    return jsonify({'message': 'Usuário cadastrado com sucesso!'}), 201
+
+# Rota de Login
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    senha = data.get('senha')
+
+    usuario = Usuario.query.filter_by(email=email).first()
+
+    if not usuario or not check_password_hash(usuario.senha, senha):
+        return jsonify({'error': 'Credenciais inválidas!'}), 401
+
+    return jsonify({'message': 'Login bem-sucedido!', 'user': {'id': usuario.id, 'email': usuario.email}}), 200
+
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
@@ -37,4 +94,3 @@ def get_text(page_id):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
     app.run(debug=True, host='0.0.0.0', port=port)
-    
