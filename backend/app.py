@@ -34,7 +34,7 @@ jwt = JWTManager(app)
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.json
+    data = request.json()
     nome = data.get('nome')
     email = data.get('email')
     senha = data.get('senha')
