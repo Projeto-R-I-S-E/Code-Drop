@@ -4,7 +4,7 @@ import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
 from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -84,8 +84,21 @@ def submit():
 
     page_id = str(uuid.uuid4())  
     pages[page_id] = text  
+    link = f'https://drop-code.netlify.app/view/{page_id}'
 
     frontend_url = 'https://drop-code.netlify.app'
+
+    user_identity = None
+    try:
+        user_identity = get_jwt_identity() 
+    except:
+        pass  
+
+    if user_identity:
+        current_user = Usuario.query.get(user_identity)
+        new_link = Link(url=link, user_id=current_user.id)
+        db.session.add(new_link)
+        db.session.commit()
 
     return jsonify({'link': f'{frontend_url}/view/{page_id}'})  
 

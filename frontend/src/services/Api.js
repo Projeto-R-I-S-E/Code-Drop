@@ -3,10 +3,13 @@ const API_BASE_URL = "https://code-drop-production.up.railway.app/api";
 
 export const sendData = async (text) => {
   try {
+    const token = localStorage.getItem('token'); 
+
     const response = await fetch(`${API_URL}/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '', 
       },
       body: JSON.stringify({ text }),
     });
