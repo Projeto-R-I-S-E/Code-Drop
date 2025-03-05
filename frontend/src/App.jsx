@@ -2,6 +2,7 @@ import { useState } from "react";
 import { sendData } from "./services/Api";
 import Modal from "./modal";
 import Header from "./componentes/header"
+import Footer from "./componentes/footer";
 
 function App() {
   
@@ -51,6 +52,7 @@ function App() {
             <a href="" className="text-2xl mt-5">exemplo</a>
           </div>
         </div>
+        <Footer />
       </main>
     </>
   );

@@ -1,5 +1,6 @@
 import Header from "./componentes/header";
 import SignUpPlace from "./componentes/SignUpPlace";
+import Footer from './componentes/footer';
 
 function SignUpPage() {
 
@@ -7,6 +8,7 @@ function SignUpPage() {
         <>
             <Header />
             <SignUpPlace />
+            <Footer/>
         </>
     );
 }
