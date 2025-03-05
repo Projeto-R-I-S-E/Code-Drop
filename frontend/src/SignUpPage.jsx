@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { registerUser } from "./Api"; 
+import { registerUser } from "./services/Api"; 
 import Header from "./componentes/header";
 
 function SignUpPage() {
