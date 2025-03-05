@@ -1,4 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = "https://code-drop-production.up.railway.app/api";
 
 export const sendData = async (text) => {
   try {
