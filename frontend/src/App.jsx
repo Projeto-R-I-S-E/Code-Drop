@@ -24,7 +24,7 @@ function App() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
+//teste
   return (
     <>
       <Header></Header>
