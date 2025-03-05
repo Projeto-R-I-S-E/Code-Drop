@@ -34,7 +34,7 @@ export async function registerUser(nome, email, senha) {
           throw new Error(`Erro ao registrar: ${response.statusText}`);
       }
 
-      return await response.json(); // Retorna a resposta do backend
+      return await response.json();
   } catch (error) {
       console.error("Erro ao registrar usuário:", error);
       return null;
