@@ -34,7 +34,7 @@ jwt = JWTManager(app)
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    data = request.json()
+    data = request.json
     nome = data.get('nome')
     email = data.get('email')
     senha = data.get('senha')
@@ -73,7 +73,7 @@ def login():
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
 def submit():
-    data = request.get_json
+    data = request.get_json()
     text = data.get('text')
 
     page_id = str(uuid.uuid4())  
