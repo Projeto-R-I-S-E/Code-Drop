@@ -20,7 +20,7 @@ const SignUpPlace = () => {
     return (
         <form 
             onSubmit={handleSubmit} 
-            className="w-2/4 h-96 flex flex-col justify-center items-center gap-5"
+            className="boreder-solid w-2/4 h-96 flex flex-col justify-center items-center gap-5"
         >
             <input 
                 type="text" 
