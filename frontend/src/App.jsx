@@ -26,7 +26,7 @@ function App() {
   };
   return (
     <>
-      <Header></Header>
+      <Header />
       <main className="m-10">
         <div className="flex gap-48">
           <form onSubmit={handleSubmit} method="post">  

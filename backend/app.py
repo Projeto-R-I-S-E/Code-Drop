@@ -3,8 +3,8 @@ from flask_cors import CORS
 import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_jwt_extended import JWTManager, create_access_token
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import JWTManager
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 static_folder = os.path.join(project_root, 'frontend', 'dist')
@@ -23,6 +23,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Instância do banco de dados
 db = SQLAlchemy(app)
+db.create_all()
 
 # Importação das models
 from models import *
