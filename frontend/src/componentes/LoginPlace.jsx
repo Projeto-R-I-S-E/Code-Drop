@@ -55,7 +55,9 @@ const LoginPlace = () => {
                     type="submit" 
                     value="Enviar"
                 />
-                <button onClick={logout}>Sair</button>
+                <form action="https://drop-code.netlify.app/login">
+                    <input type="submit" onClick={logout} value="Sair" />
+                </form>
             </form>
         </div>
     );
