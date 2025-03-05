@@ -5,7 +5,6 @@ const LoginPlace = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -16,7 +15,7 @@ const LoginPlace = () => {
         if (response && response.token) {
             localStorage.setItem('token', response.token);
             alert('Login realizado com sucesso!');
-            navigate('/');
+            window.location.href = '/'
         } else {
             setError('Email ou senha inválidos!');
         }
