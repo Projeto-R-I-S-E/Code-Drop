@@ -29,6 +29,8 @@ migrate = Migrate(app, db)
 # Importação das models
 from models import *
 
+pages = {}
+
 app.config["JWT_SECRET_KEY"] = "your_secret_key"
 jwt = JWTManager(app)
 
@@ -78,6 +80,7 @@ def login():
 @app.route('/api/submit', methods=['POST'])
 @jwt_required(optional=True)  # Permite usuários logados e não logados
 def submit():
+    pages[page_id] = text
     try:
         data = request.get_json()
         text = data.get('text')
@@ -119,10 +122,9 @@ def get_user_links():
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    link = Link.query.filter_by(id=page_id).first()  # Busca o link no banco
-
-    if link:
-        return jsonify({'text': link.url})  # Se quiser salvar o código também, adicione um campo na model Link
+    text = pages.get(page_id)
+    if text:
+        return jsonify({'text': text})
     else:
         return jsonify({'error': 'Página não encontrada'}), 404
 
