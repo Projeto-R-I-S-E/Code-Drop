@@ -1,5 +1,5 @@
 import Header from "./componentes/header";
-import SignUpPlace from "./componentes/SingUpPlace";
+import SignUpPlace from "./componentes/SignUpPlace";
 
 function SignUpPage() {
 
