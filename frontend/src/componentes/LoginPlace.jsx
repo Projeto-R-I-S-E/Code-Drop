@@ -15,6 +15,7 @@ const LoginPlace = () => {
         if (response && response.token) {
             localStorage.setItem('token', response.token);
             alert('Login realizado com sucesso!');
+            window.location.href = '/'
         } else {
             setError('Email ou senha inválidos!');
         }
@@ -22,7 +23,7 @@ const LoginPlace = () => {
 
     return (
         <div className='border-solid w-2/4 h-96 flex flex-col justify-center items-center gap-5'>
-            <form action="https://drop-code.netlify.app/" onSubmit={handleSubmit} className='flex flex-col gap-4'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 {error && <p className='text-red-500'>{error}</p>}
                 <input 
                     type="email"
