@@ -80,29 +80,40 @@ def login():
 @app.route('/api/submit', methods=['POST'])
 @jwt_required()  # Isso garante que o usuário esteja autenticado
 def submit():
-    data = request.get_json()
-    text = data.get('text')
+    try:
+        data = request.get_json()
+        text = data.get('text')
 
-    # Verifica se o usuário está autenticado
-    user_email = get_jwt_identity()
+        if not text:
+            return jsonify({'error': 'O texto não pode ser vazio'}), 400
 
-    if not user_email:
-        # Caso não haja token ou o usuário não esteja autenticado, cria o link sem salvar no banco
-        page_id = str(uuid.uuid4())
-        pages[page_id] = text
+        # Verifica se o usuário está autenticado
+        user_email = get_jwt_identity()
+
+        if not user_email:
+            # Caso não haja token ou o usuário não esteja autenticado, cria o link sem salvar no banco
+            page_id = str(uuid.uuid4())
+            pages[page_id] = text
+            frontend_url = 'https://drop-code.netlify.app'
+            return jsonify({'link': f'{frontend_url}/view/{page_id}'}), 200
+        
+        # Se o usuário estiver autenticado, associamos o link a ele
+        user = Usuario.query.filter_by(email=user_email).first()
+
+        if not user:
+            return jsonify({'error': 'Usuário não encontrado'}), 404
+
+        page_id = str(uuid.uuid4())  # Mantemos o UUID para o link
+        new_link = Link(id=page_id, url=text, user_id=user.id)  # Salva o link com o user_id
+        db.session.add(new_link)
+        db.session.commit()
+
         frontend_url = 'https://drop-code.netlify.app'
-        return jsonify({'link': f'{frontend_url}/view/{page_id}'})
+        return jsonify({'link': f'{frontend_url}/view/{page_id}'}), 200
+    except Exception as e:
+        print(f"Erro: {str(e)}")
+        return jsonify({'error': 'Erro ao criar link'}), 500
     
-    # Se o usuário estiver autenticado, associamos o link a ele
-    page_id = str(uuid.uuid4())  # Mantemos o UUID para o link
-    user = Usuario.query.filter_by(email=user_email).first()  # Busca o usuário pelo email
-    new_link = Link(id=page_id, url=text, user_id=user.id)  # Salva o link com o user_id
-    db.session.add(new_link)
-    db.session.commit()
-
-    frontend_url = 'https://drop-code.netlify.app'
-    return jsonify({'link': f'{frontend_url}/view/{page_id}'})
-
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
     text = pages.get(page_id)
