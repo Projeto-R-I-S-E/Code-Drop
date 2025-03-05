@@ -1,4 +1,4 @@
-//commit
+import Footer from './componentes/footer';
 import Header from './componentes/header'
 import LoginPlace from './componentes/LoginPlace'
 function LoginPage(){
@@ -6,6 +6,7 @@ function LoginPage(){
         <>
             <Header />
             <LoginPlace />
+            <Footer/>
         </>
     )
 }
