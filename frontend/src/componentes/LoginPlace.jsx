@@ -24,9 +24,8 @@ const LoginPlace = () => {
         return !!localStorage.getItem("token"); // Se houver token, está logado
     };
     const logout = () => {
-        {isUserLoggedIn() ? alert("Você ainda  não fez login") :
         localStorage.removeItem("token");
-        alert("Você saiu da conta!");}
+        alert("Você saiu da conta!");
     };
 
     return (
