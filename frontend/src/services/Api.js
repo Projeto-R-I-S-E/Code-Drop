@@ -3,14 +3,10 @@ const API_BASE_URL = "https://code-drop-production.up.railway.app/api";
 
 export const sendData = async (text) => {
   try {
-    const token = localStorage.getItem('token');  // Obtém o token do localStorage, se presente
-    console.log("Token", token);  // Debug para ver o token
-
     const response = await fetch(`${API_URL}/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : '',  // Adiciona o token no cabeçalho, se existir
       },
       body: JSON.stringify({ text }),
     });
@@ -20,15 +16,9 @@ export const sendData = async (text) => {
     }
 
     const data = await response.json();
-    if (data.link) {
-      console.log("Link gerado: ", data.link);  // Debug para ver o link retornado
-      return data;  // Retorna os dados contendo o link
-    } else {
-      throw new Error('Link não gerado');
-    }
+    return data;
   } catch (error) {
     console.error(error);
-    return { error: error.message };  // Retorna o erro
   }
 };
 

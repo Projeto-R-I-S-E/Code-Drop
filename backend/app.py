@@ -4,7 +4,7 @@ import uuid
 import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import JWTManager,  create_access_token
 from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -78,42 +78,17 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
-@jwt_required()  # Isso garante que o usuário esteja autenticado
 def submit():
-    try:
-        data = request.get_json()
-        text = data.get('text')
+    data = request.get_json()
+    text = data.get('text')
 
-        if not text:
-            return jsonify({'error': 'O texto não pode ser vazio'}), 400
+    page_id = str(uuid.uuid4())  
+    pages[page_id] = text  
 
-        # Verifica se o usuário está autenticado
-        user_email = get_jwt_identity()
+    frontend_url = 'https://drop-code.netlify.app'
 
-        if not user_email:
-            # Caso não haja token ou o usuário não esteja autenticado, cria o link sem salvar no banco
-            page_id = str(uuid.uuid4())
-            pages[page_id] = text
-            frontend_url = 'https://drop-code.netlify.app'
-            return jsonify({'link': f'{frontend_url}/view/{page_id}'}), 200
-        
-        # Se o usuário estiver autenticado, associamos o link a ele
-        user = Usuario.query.filter_by(email=user_email).first()
+    return jsonify({'link': f'{frontend_url}/view/{page_id}'})  
 
-        if not user:
-            return jsonify({'error': 'Usuário não encontrado'}), 404
-
-        page_id = str(uuid.uuid4())  # Mantemos o UUID para o link
-        new_link = Link(id=page_id, url=text, user_id=user.id)  # Salva o link com o user_id
-        db.session.add(new_link)
-        db.session.commit()
-
-        frontend_url = 'https://drop-code.netlify.app'
-        return jsonify({'link': f'{frontend_url}/view/{page_id}'}), 200
-    except Exception as e:
-        print(f"Erro: {str(e)}")
-        return jsonify({'error': 'Erro ao criar link'}), 500
-    
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
     text = pages.get(page_id)
