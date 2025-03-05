@@ -24,15 +24,18 @@ const LoginPlace = () => {
         return !!localStorage.getItem("token"); // Se houver token, está logado
     };
     const logout = () => {
+        {isUserLoggedIn() ? alert("Você ainda  não fez login") :
         localStorage.removeItem("token");
-        alert("Você saiu da conta!");
+        alert("Você saiu da conta!");}
     };
 
     return (
         <div className='border-solid w-2/4 h-96 flex flex-col justify-center items-center gap-5'>
-            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+            {isUserLoggedIn() ? <p>Usuário Logado</p> : 
+            <>
+                <p>Faça login</p>
+                <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 {error && <p className='text-red-500'>{error}</p>}
-                {isUserLoggedIn() ? <p>Usuário Logado</p> : <p>Faça login</p>}
                 <input 
                     type="email"
                     name="email"
@@ -55,9 +58,11 @@ const LoginPlace = () => {
                     type="submit" 
                     value="Enviar"
                 />
-                <form action="https://drop-code.netlify.app/login">
-                    <input type="submit" onClick={logout} value="Sair" />
-                </form>
+            </form>
+            </>
+            }
+            <form action="https://drop-code.netlify.app/login">
+                <input type="submit" onClick={logout} value="Sair" />
             </form>
         </div>
     );
