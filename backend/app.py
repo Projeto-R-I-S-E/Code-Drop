@@ -5,6 +5,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 static_folder = os.path.join(project_root, 'frontend', 'dist')
@@ -23,6 +24,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Instância do banco de dados
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Importação das models
 from models import *
