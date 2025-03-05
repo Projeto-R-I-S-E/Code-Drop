@@ -23,7 +23,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Instância do banco de dados
 db = SQLAlchemy(app)
-db.create_all()
 
 # Importação das models
 from models import *
