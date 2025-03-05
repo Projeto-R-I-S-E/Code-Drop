@@ -25,7 +25,12 @@ const LoginPlace = () => {
     };
     const logout = () => {
         localStorage.removeItem("token");
-        alert("Você saiu da conta!");
+        if(isUserLoggedIn() == True){
+            alert("Você saiu da conta!");
+        } else{
+            alert("Você ainda não fez login")
+        }
+        
     };
 
     return (
@@ -35,29 +40,29 @@ const LoginPlace = () => {
                 <p>Faça login</p>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 {error && <p className='text-red-500'>{error}</p>}
-                <input 
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    placeholder="Digite seu email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input 
-                    type="password" 
-                    name="senha" 
-                    id="senha" 
-                    required 
-                    placeholder='Digite sua senha'
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
-                />
-                <input 
-                    type="submit" 
-                    value="Enviar"
-                />
-            </form>
+                    <input 
+                        type="email"
+                        name="email"
+                        id="email"
+                        required
+                        placeholder="Digite seu email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input 
+                        type="password" 
+                        name="senha" 
+                        id="senha" 
+                        required 
+                        placeholder='Digite sua senha'
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                    />
+                    <input 
+                        type="submit" 
+                        value="Enviar"
+                    />
+                </form>
             </>
             }
             <form action="https://drop-code.netlify.app/login">
