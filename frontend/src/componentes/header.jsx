@@ -12,7 +12,7 @@ const Header = () => {
                     <input type="submit" value="LOGIN" className="bg-Backgrond pl-4 pr-4 pt-1 pb-1 border-white text-white"/>
                 </form>
                 <form action="https://drop-code.netlify.app/signup">
-                    <input type="submit" value="SIGN UP" className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
+                    <input type="submit" value="SIGN UP" disabled={!localStorage.getItem("token")} className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
                 </form>
             </div>
         </header>
