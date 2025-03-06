@@ -14,7 +14,6 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await sendData(text);
-    const token = await sendData(token);
     console.log("Resposta do backend:", response);
 
     setLink(response.link); 
