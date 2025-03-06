@@ -102,7 +102,6 @@ def submit():
             db.session.commit()	
         print(f'user returned: {user}')
         print(f'JWT Identity: {user_email}')
-        print(f'jwat_required: {@jwt_required}')
 
         return jsonify({'link': link})
     except Exception as e:
