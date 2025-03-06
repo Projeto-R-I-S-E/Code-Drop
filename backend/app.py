@@ -119,12 +119,16 @@ def get_user_links():
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    link = Link.query.filter_by(id=page_id).first()  # Busca o link no banco
+    try:
+        link = Link.query.filter_by(id=page_id).first()  # Buscando pelo id gerado no banco
+        if not link:
+            return jsonify({'error': 'Link não encontrado'}), 404
+        
+        return jsonify({'text': link.text}), 200  # Retorna o texto armazenado no banco de dados
 
-    if link:
-        return jsonify({'text': link.url})  # Se quiser salvar o código também, adicione um campo na model Link
-    else:
-        return jsonify({'error': 'Página não encontrada'}), 404
+    except Exception as e:
+        print("Erro ao buscar link:", str(e))
+        return jsonify({'error': 'Erro interno no servidor'}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 

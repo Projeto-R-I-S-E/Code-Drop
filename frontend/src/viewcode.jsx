@@ -24,7 +24,7 @@ function ViewCode() {
 
   return (
     <>
-      <Header></Header>
+      <Header />
       <div className="container">
         {text ? (
           <>
