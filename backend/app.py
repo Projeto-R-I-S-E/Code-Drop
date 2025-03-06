@@ -87,17 +87,16 @@ def submit():
 
         user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
-        print(f'user returned: {user}')	
 
         frontend_url = 'https://drop-code.netlify.app'
         page_id = str(uuid.uuid4())  
         link = f'{frontend_url}/view/{page_id}'
 
         # Salva no banco de dados se o usuário estiver logado
-        if user:
-            new_link = Link(url=link, user_id=user.id)
-            db.session.add(new_link)
-            db.session.commit()
+        
+        new_link = Link(url=link, user_id=user.id)
+        db.session.add(new_link)
+        db.session.commit()
 
         return jsonify({'link': link})
     except Exception as e:
