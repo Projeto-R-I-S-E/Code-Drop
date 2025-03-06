@@ -80,7 +80,9 @@ def login():
 def submit():
     try:
         data = request.get_json()
+        print(f'data: {data}')	
         text = data.get('text')
+        print(f'text: {text}')
 
         if not text:
             return jsonify({'error': 'Texto obrigatório!'}), 400
@@ -100,7 +102,7 @@ def submit():
             db.session.commit()	
         print(f'user returned: {user}')
         print(f'JWT Identity: {user_email}')
-        print(jwt_required)
+        print(f'jwat_required: {@jwt_required}')
 
         return jsonify({'link': link})
     except Exception as e:
