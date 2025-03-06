@@ -76,35 +76,24 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
-@jwt_required(optional=True)
 def submit():
-    try:
-        data = request.get_json()
-        text = data.get('text')
+    data = request.json
+    text = data.get('text')
+    user_id = data.get('user_id')  # Se o usuário estiver logado
 
-        if not text:
-            return jsonify({'error': 'Texto obrigatório!'}), 400
+    if not text:
+        return jsonify({'error': 'Texto não pode estar vazio'}), 400
 
-        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
-        user = Usuario.query.filter_by(email=user_email).first() if user_email else None
-        print(f'user returned: {user}')
-        print(f'user_email: {user_email}')
+    # Gerando um ID único para o link
+    page_id = str(uuid.uuid4())
 
-        frontend_url = 'https://drop-code.netlify.app'
-        page_id = str(uuid.uuid4())  
-        link = f'{frontend_url}/view/{page_id}'
-        print(f'page_id: {page_id}')
+    # Criando o link
+    new_link = Link(id=page_id, url=text, user_id=user_id)
+    db.session.add(new_link)
+    db.session.commit()
 
-        # Salva no banco de dados se o usuário estiver logado
-        if user:
-            new_link = Link(url=link, user_id=user.id)
-            db.session.add(new_link)
-            db.session.commit()
-
-        return jsonify({'link': link})
-    except Exception as e:
-        print("Erro no backend:", str(e))
-        return jsonify({'error': 'Erro interno no servidor'}), 500
+    frontend_url = "https://drop-code.netlify.app"
+    return jsonify({'link': f'{frontend_url}/view/{page_id}'})
 
 @app.route('/api/user/links', methods=['GET'])
 @jwt_required()
@@ -122,11 +111,16 @@ def get_user_links():
 
 @app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    text = pages.get(page_id)
-    if text:
-        return jsonify({'text': text})
-    else:
-        return jsonify({'error': 'Página não encontrada'}), 404
+     try:
+        link = Link.query.filter_by(id=page_id).first()  # Buscando no banco de dados
+        if not link:
+            return jsonify({'error': 'Página não encontrada'}), 404
+
+        return jsonify({'text': link.url})  # Retorna o texto salvo no banco
+
+    except Exception as e:
+        print("Erro ao buscar link:", str(e))
+        return jsonify({'error': 'Erro interno no servidor'}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
