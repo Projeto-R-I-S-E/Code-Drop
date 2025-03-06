@@ -10,7 +10,8 @@ function App() {
 
   const [text, setText] = useState('');
   const [link, setLink] = useState('');
-  const [setToken] = useState('');	
+  const [token, setToken] = useState('');	
+  token == localStorage.getItem('token');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
