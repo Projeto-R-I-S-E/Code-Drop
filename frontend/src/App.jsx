@@ -10,12 +10,15 @@ function App() {
 
   const [text, setText] = useState('');
   const [link, setLink] = useState('');
+  const [setToken] = useState('');	
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await sendData(text);
+    const token = await sendData(token);
     console.log("Resposta do backend:", response);
 
+    setToken(token);
     setLink(response.link); 
     setIsModalOpen(true);
   };
