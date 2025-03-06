@@ -19,7 +19,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:IYeKzDtAFjXPowhcciiLBpWNyowQoimM@caboose.proxy.rlwy.net:28835/railway"
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:IYeKzDtAFjXPowhcciiLBpWNyowQoimM@caboose.proxy.rlwy.net:28835/railway'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Instância do banco de dados
@@ -88,7 +88,6 @@ def submit():
             return jsonify({'error': 'Texto obrigatório!'}), 400
 
         user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
-        print(f"Token recebido no backend, usuário: {user_email}")
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
         frontend_url = 'https://drop-code.netlify.app'
@@ -96,7 +95,7 @@ def submit():
         link = f'{frontend_url}/view/{page_id}'
 
         # Salva no banco de dados se o usuário estiver logado
-        
+
         if user:
             new_link = Link(url=link, text=text, user_id=user.id)
             db.session.add(new_link)
@@ -129,7 +128,7 @@ def get_text(page_id):
         link = Link.query.filter_by(id=page_id).first()  # Buscando pelo id gerado no banco
         if not link:
             return jsonify({'error': 'Link não encontrado'}), 404
-        
+
         return jsonify({'text': link.text}), 200  # Retorna o texto armazenado no banco de dados
 
     except Exception as e:

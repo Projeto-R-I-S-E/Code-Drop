@@ -5,29 +5,19 @@ import Header from "./componentes/header"
 import Footer from "./componentes/footer";
 
 function App() {
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [text, setText] = useState('');
   const [link, setLink] = useState('');
-  const [setToken] = useState('');	
-  useEffect(() => {
-    setToken(localStorage.getItem('token') || '');
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    const storedToken = localStorage.getItem('token'); // Obtém o token do localStorage
-    const response = await sendData(storedToken, text); // Chama a API corretamente
-  
-    if (response) {
-      console.log("Resposta do backend:", response);
-      setLink(response.link); 
-      setIsModalOpen(true);
-    } else {
-      console.error("Erro ao enviar dados para o backend.");
-    }
+    const response = await sendData(text);
+    console.log("Resposta do backend:", response);
+
+    setLink(response.link); 
+    setIsModalOpen(true);
   };
 
   const [copied, setCopied] = useState(false);
