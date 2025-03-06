@@ -29,8 +29,6 @@ migrate = Migrate(app, db)
 # Importação das models
 from models import *
 
-pages = {}
-
 app.config["JWT_SECRET_KEY"] = "your_secret_key"
 jwt = JWTManager(app)
 
@@ -78,16 +76,32 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
+@jwt_required(optional=True)
 def submit():
-    data = request.get_json()
-    text = data.get('text')
+    try:
+        data = request.get_json()
+        text = data.get('text')
 
-    page_id = str(uuid.uuid4())  
-    pages[page_id] = text  
+        if not text:
+            return jsonify({'error': 'Texto obrigatório!'}), 400
 
-    frontend_url = 'https://drop-code.netlify.app'
+        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
+        user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
-    return jsonify({'link': f'{frontend_url}/view/{page_id}'}) 
+        frontend_url = 'https://drop-code.netlify.app'
+        page_id = str(uuid.uuid4())  
+        link = f'{frontend_url}/view/{page_id}'
+
+        # Salva no banco de dados se o usuário estiver logado
+        if user:
+            new_link = Link(url=link, user_id=user.id)
+            db.session.add(new_link)
+            db.session.commit()
+
+        return jsonify({'link': link})
+    except Exception as e:
+        print("Erro no backend:", str(e))
+        return jsonify({'error': 'Erro interno no servidor'}), 500
 
 @app.route('/api/user/links', methods=['GET'])
 @jwt_required()
