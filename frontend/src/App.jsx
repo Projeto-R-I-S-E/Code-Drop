@@ -37,7 +37,7 @@ function App() {
             value={text} onChange={(e) => setText(e.target.value)}
             className="border-solid border-gray-300 text-2xl resize-none" placeholder="Digite seu código" required></textarea>
             <br />
-            <input type="submit" value="Enivar código" className="mt-4 p-2 bg-blue-500 text-white rounded"/>
+            <input type="submit" value="Enviar código" className="mt-4 p-2 bg-blue-500 text-white rounded"/>
           </form>
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <h2 className="text-xl font-bold">Compartilhar código</h2>
