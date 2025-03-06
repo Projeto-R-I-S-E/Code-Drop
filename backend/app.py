@@ -76,35 +76,35 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
-@jwt_required(optional=True)  # Permite usuários logados e não logados
-def submit():
-    try:
-        data = request.get_json()
-        text = data.get('text')
+if access_token:  # Permite usuários logados e não logados
+    def submit():
+        try:
+            data = request.get_json()
+            text = data.get('text')
 
-        if not text:
-            return jsonify({'error': 'Texto obrigatório!'}), 400
+            if not text:
+                return jsonify({'error': 'Texto obrigatório!'}), 400
 
-        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
-        user = Usuario.query.filter_by(email=user_email).first() if user_email else None
+            user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
+            user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
-        frontend_url = 'https://drop-code.netlify.app'
-        page_id = str(uuid.uuid4())  
-        link = f'{frontend_url}/view/{page_id}'
+            frontend_url = 'https://drop-code.netlify.app'
+            page_id = str(uuid.uuid4())  
+            link = f'{frontend_url}/view/{page_id}'
 
-        # Salva no banco de dados se o usuário estiver logado
-        
-        if user:
-            new_link = Link(url=link, text=text, user_id=user.id)
-            db.session.add(new_link)
-            db.session.commit()	
-        print(f'user returned: {user}')
-        print(f'JWT Identity: {user_email}')
+            # Salva no banco de dados se o usuário estiver logado
+            
+            if user:
+                new_link = Link(url=link, text=text, user_id=user.id)
+                db.session.add(new_link)
+                db.session.commit()	
+            print(f'user returned: {user}')
+            print(f'JWT Identity: {user_email}')
 
-        return jsonify({'link': link})
-    except Exception as e:
-        print("Erro no backend:", str(e))
-        return jsonify({'error': 'Erro interno no servidor'}), 500
+            return jsonify({'link': link})
+        except Exception as e:
+            print("Erro no backend:", str(e))
+            return jsonify({'error': 'Erro interno no servidor'}), 500
 
 @app.route('/api/user/links', methods=['GET'])
 @jwt_required()
