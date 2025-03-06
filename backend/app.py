@@ -94,9 +94,11 @@ def submit():
 
         # Salva no banco de dados se o usuário estiver logado
         
-        new_link = Link(url=link, user_id=user.id)
-        db.session.add(new_link)
-        db.session.commit()
+        if user:
+            new_link = Link(url=link, text=text, user_id=user.id)
+            db.session.add(new_link)
+            db.session.commit()	
+        print(f'user returned: {user}')
 
         return jsonify({'link': link})
     except Exception as e:
