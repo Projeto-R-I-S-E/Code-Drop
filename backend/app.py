@@ -87,10 +87,13 @@ def submit():
 
         user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
+        print(f'user returned: {user}')
+        print(f'user_email: {user_email}')
 
         frontend_url = 'https://drop-code.netlify.app'
         page_id = str(uuid.uuid4())  
         link = f'{frontend_url}/view/{page_id}'
+        print(f'page_id: {page_id}')
 
         # Salva no banco de dados se o usuário estiver logado
         if user:
