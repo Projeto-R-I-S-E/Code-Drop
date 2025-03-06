@@ -14,8 +14,6 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await sendData(text);
-    console.log("Resposta do backend:", response);
-
     setLink(response.link); 
     setIsModalOpen(true);
   };

@@ -22,27 +22,6 @@ export const sendData = async (text) => {
   }
 };
 
-export async function getUserLinks(token) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/user/links`, {
-      method: "GET",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error("Erro ao buscar links");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Erro ao buscar links do usuário:", error);
-    return null;
-  }
-}
-
 export async function registerUser(nome, email, senha) {
   try {
       const response = await fetch(`${API_BASE_URL}/register`, {
