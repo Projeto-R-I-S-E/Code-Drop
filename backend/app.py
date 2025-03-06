@@ -76,7 +76,7 @@ def login():
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
-@jwt_required(optional=True)  # Permite usuários logados e não logados
+@jwt_required()  # Permite usuários logados e não logados
 def submit():
     try:
         data = request.get_json()
