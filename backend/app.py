@@ -88,6 +88,7 @@ def submit():
             return jsonify({'error': 'Texto obrigatório!'}), 400
 
         user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
+        print(f"Token recebido no backend, usuário: {user_email}")
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
         frontend_url = 'https://drop-code.netlify.app'

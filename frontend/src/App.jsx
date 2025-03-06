@@ -10,18 +10,24 @@ function App() {
 
   const [text, setText] = useState('');
   const [link, setLink] = useState('');
-  const [token, setToken] = useState('');	
-  token == localStorage.getItem('token');
+  const [setToken] = useState('');	
+  useEffect(() => {
+    setToken(localStorage.getItem('token') || '');
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await sendData(text);
-    const token = await sendData(token);
-    console.log("Resposta do backend:", response);
-
-    setToken(token);
-    setLink(response.link); 
-    setIsModalOpen(true);
+  
+    const storedToken = localStorage.getItem('token'); // Obtém o token do localStorage
+    const response = await sendData(storedToken, text); // Chama a API corretamente
+  
+    if (response) {
+      console.log("Resposta do backend:", response);
+      setLink(response.link); 
+      setIsModalOpen(true);
+    } else {
+      console.error("Erro ao enviar dados para o backend.");
+    }
   };
 
   const [copied, setCopied] = useState(false);
