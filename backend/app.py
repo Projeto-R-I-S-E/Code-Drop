@@ -134,11 +134,11 @@ def get_user_links():
 
     return jsonify({'links': links_list}) 
 
-@app.route('/api/view/<page_id>', methods=['GET'])
-def get_text(page_id):
-    print(f"🔍 Buscando texto para page_id: {page_id}")  # Debugging
+@app.route('/api/view/<id>', methods=['GET'])
+def get_text(id):
+    print(f"🔍 Buscando texto para page_id: {id}")  # Debugging
 
-    link = Link.query.filter_by(url=f'https://drop-code.netlify.app/view/{page_id}').first()
+    link = Link.query.filter_by(url=f'https://drop-code.netlify.app/view/{id}').first()
 
     if not link:
         print("❌ Texto não encontrado!")

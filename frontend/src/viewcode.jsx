@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 import Header from "./componentes/header";
 
 const ViewCode = () => {
-  const { page_id } = useParams();
+  const { id } = useParams();
   const [text, setText] = useState("");
 
   useEffect(() => {
     const fetchText = async () => {
       try {
-        const response = await fetch(`https://code-drop-production.up.railway.app/api/view/${page_id}`);
+        const response = await fetch(`https://code-drop-production.up.railway.app/api/view/${id}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -23,7 +23,7 @@ const ViewCode = () => {
     };
 
     fetchText();
-  }, [page_id]);
+  }, [id]);
 
   return (
     <>
