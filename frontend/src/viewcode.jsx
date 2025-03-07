@@ -3,26 +3,24 @@ import { useParams } from "react-router-dom";
 import Header from './componentes/header'
 
 const ViewCode = () => {
-  const { page_id } = useParams();
-  const [text, setText] = useState("");
+  const { page_id } = useParams(); // Obtém o ID da URL
+  console.log("🔍 page_id recebido no frontend:", page_id);
 
   useEffect(() => {
-    const fetchText = async () => {
-      try {
-        const response = await fetch(`https://code-drop-production.up.railway.app/api/view/${page_id}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setText(data.text);
+    fetch(`https://code-drop-production.up.railway.app/api/view/${page_id}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log("📝 Resposta do backend:", data);
+        if (data.error) {
+          setError("Texto não encontrado.");
         } else {
-          setText("Erro ao carregar o texto.");
+          setText(data.text);
         }
-      } catch (error) {
-        setText("Erro de conexão com o servidor.");
-      }
-    };
-
-    fetchText();
+      })
+      .catch(err => {
+        console.log("❌ Erro na requisição:", err);
+        setError("Erro ao carregar o texto.");
+      });
   }, [page_id]);
 
   return (
