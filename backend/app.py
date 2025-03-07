@@ -139,15 +139,15 @@ def get_user_links():
 
 @app.route('/api/view/<id>', methods=['GET'])
 def get_text(id):
-    print(f"🔍 Buscando texto para page_id: {id}")  # Debugging
+    print(f"Buscando texto para page_id: {id}")
 
     text = textos_armazenados.get(id)
 
     if not text:
-        print("❌ Texto não encontrado!")
+        print("Texto não encontrado!")
         return jsonify({'error': 'Texto não encontrado'}), 404
 
-    print(f"✅ Texto encontrado: {text}")
+    print(f"Texto encontrado: {text}")
     return jsonify({'text': text})
 
 if __name__ == '__main__':
