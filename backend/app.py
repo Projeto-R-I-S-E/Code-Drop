@@ -138,14 +138,13 @@ def get_user_links():
 def get_text(page_id):
     print(f"🔍 Buscando texto para page_id: {page_id}")  # Debugging
 
-    link = Link.query.filter_by(url=f'https://drop-code.netlify.app/view/{page_id}').first()
-
-    if not link:
+    text = request.json()
+    if not text:
         print("❌ Texto não encontrado!")
         return jsonify({'error': 'Texto não encontrado'}), 404
 
-    print(f"✅ Texto encontrado: {link.text}")
-    return jsonify({'text': link.text})
+    print(f"✅ Texto encontrado: {text}")
+    return jsonify({'text': text})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
