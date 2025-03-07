@@ -21,7 +21,7 @@ const Header = () => {
                 {token ? 
                 <>
                     <form action="https://drop-code.netlify.app">
-                        <input type="submit" onClick={logout} disabled={!localStorage.getItem("token")} value="Sair" />
+                        <input type="submit" onClick={logout} />
                     </form>
                 </>
                 :
