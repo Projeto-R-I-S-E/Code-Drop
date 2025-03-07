@@ -57,12 +57,7 @@ const LoginPlace = () => {
                         className='text-blue-800 p-2 m-2 bg-white border border-blue-800 rounded-md '
                         value="Enviar"
                     />
-                    <input
-                        type="button"
-                        className= 'bg-blue-700 text-white rounded-md p-2 m-2 border border-white'
-                        value="Voltar"
-                        onClick={() => window.location.href = '/'} 
-                    />
+                    <a href="https://drop-code.netlify.app/signup" className="bg-blue-700 text-white border border-white">Cadastre-se aqui</a>
                 </form>
                 </main>
             </>
