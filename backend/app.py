@@ -79,33 +79,45 @@ def login():
 @jwt_required(optional=True)  # Permite usuários logados e não logados
 def submit():
     try:
+        # 🚀 Verifica se a requisição tem um JSON válido
+        if not request.is_json:
+            return jsonify({'error': 'Requisição inválida, JSON esperado'}), 400
+
         data = request.get_json()
-        print(f'data: {data}')	
+        print(f"📩 Recebido JSON: {data}")
+
+        # 🚀 Verifica se "text" foi enviado corretamente
         text = data.get('text')
-        print(f'text: {text}')
-
         if not text:
-            return jsonify({'error': 'Texto obrigatório!'}), 400
+            return jsonify({'error': 'O campo "text" é obrigatório!'}), 422  # ⚠️ Alterado para 422
 
-        user_email = get_jwt_identity()  # Obtém o e-mail do usuário logado (ou None se não logado)
+        # 🚀 Obtém o usuário logado (se houver)
+        user_email = get_jwt_identity()
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
+        # 🚀 Gera o link único para a página no frontend
         frontend_url = 'https://drop-code.netlify.app'
         page_id = str(uuid.uuid4())  
         link = f'{frontend_url}/view/{page_id}'
 
-        # Salva no banco de dados se o usuário estiver logado
-
+        # 🚀 Se o usuário estiver logado, salva no banco de dados
         if user:
-            new_link = Link(url=link, text=text, user_id=user.id)
-            db.session.add(new_link)
-            db.session.commit()	
-        print(f'user returned: {user}')
-        print(f'JWT Identity: {user_email}')
+            try:
+                new_link = Link(url=link, text=text, user_id=user.id)
+                db.session.add(new_link)
+                db.session.commit()
+            except Exception as db_error:
+                db.session.rollback()
+                print(f"⚠️ Erro ao salvar no banco: {db_error}")
+                return jsonify({'error': 'Erro ao salvar no banco'}), 500
 
-        return jsonify({'link': link})
+        print(f"🔗 Link gerado: {link}")
+        print(f"👤 Usuário logado: {user_email if user else 'Nenhum'}")
+
+        return jsonify({'link': link})  # Retorna o link gerado
+
     except Exception as e:
-        print("Erro no backend:", str(e))
+        print(f"🔥 Erro no backend: {str(e)}")
         return jsonify({'error': 'Erro interno no servidor'}), 500
 
 @app.route('/api/user/links', methods=['GET'])

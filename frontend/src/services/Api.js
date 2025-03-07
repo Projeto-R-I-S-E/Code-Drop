@@ -1,27 +1,28 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_BASE_URL = "https://code-drop-production.up.railway.app/api";
 
-export const sendData = async (token, text) => {
+export async function sendData(text, token) {
   try {
-    const response = await fetch(`${API_URL}/submit`, {
-      method: 'POST',
+    const response = await fetch("https://code-drop-production.up.railway.app/api/submit", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "", // Certifique-se de enviar o token corretamente
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text }), // O backend pode estar esperando "text" ao invés de "code"
     });
 
     if (!response.ok) {
-      throw new Error('Erro na requisição');
+      console.error("Erro ao enviar dados:", response.status, response.statusText);
+      return null;
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error(error);
+    console.error("Erro na requisição:", error);
+    return null;
   }
-};
+}
 
 export async function getUserLinks(token) {
   try {

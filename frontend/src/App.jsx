@@ -8,7 +8,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [text, setText] = useState("");
   const [link, setLink] = useState("");
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token] = useState(localStorage.getItem("token") || "");
   const [userLinks, setUserLinks] = useState([]);
   const [copied, setCopied] = useState(false);
 
