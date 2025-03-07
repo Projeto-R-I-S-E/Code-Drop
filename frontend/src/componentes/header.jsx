@@ -27,10 +27,10 @@ const Header = () => {
                 :
                 <>
                     <form action="https://drop-code.netlify.app/login">
-                        <input type="submit" value="LOGIN" className="bg-blue-800 text-white border border-white px-4 py-2 rounded-md"/>
+                        <input type="submit" value="LOGIN" className="bg-blue-800 text-white border-2 border-white px-6 py-2 rounded-md cursor-pointer"/>
                     </form>
                     <form action="https://drop-code.netlify.app/signup">
-                        <input type="submit" value="SIGN UP" disabled={localStorage.getItem("token")} className="bg-white text-blue-800 border border-blue-800 px-4 py-2 rounded-md"/>
+                        <input type="submit" value="SIGN UP" disabled={localStorage.getItem("token")} className="bg-white text-blue-800 border-2 border-white px-4 py-2 rounded-md cursor-pointer"/>
                     </form>
                 </>
                 }

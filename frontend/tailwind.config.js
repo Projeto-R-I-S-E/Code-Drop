@@ -7,7 +7,7 @@ export default {
     extend: {
       colors:{
         Backgrond: '#024166',
-        TerminalSvg: '#0A78BC'
+        TerminalSvg: '#ffffff'
       }
     },
   },
