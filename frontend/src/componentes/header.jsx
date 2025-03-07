@@ -1,4 +1,7 @@
+import {useState} from "react"; 
+
 const Header = () => {
+    const [token] = useState(localStorage.getItem("token") || "");
     return(
         <header className="w-full h-28 bg-Backgrond flex justify-around place-items-center">
             <div className="flex gap-6 place-items-center">
@@ -8,12 +11,18 @@ const Header = () => {
                 <h1 className="text-white h-fit m-0">CODE-DROP</h1>
             </div>
             <div className="flex gap-4">
-                <form action="https://drop-code.netlify.app/login">
-                    <input type="submit" value="LOGIN" className="bg-Backgrond pl-4 pr-4 pt-1 pb-1 border-white text-white"/>
-                </form>
-                <form action="https://drop-code.netlify.app/signup">
-                    <input type="submit" value="SIGN UP" disabled={localStorage.getItem("token")} className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
-                </form>
+                {token ? 
+                <>
+                    <form action="https://drop-code.netlify.app/login">
+                        <input type="submit" value="LOGIN" className="bg-Backgrond pl-4 pr-4 pt-1 pb-1 border-white text-white"/>
+                    </form>
+                    <form action="https://drop-code.netlify.app/signup">
+                        <input type="submit" value="SIGN UP" disabled={localStorage.getItem("token")} className="bg-white pl-4 pr-4 pt-1 pb-1 border-white text-Backgrond"/>
+                    </form>
+                </>
+                :
+                <h2>Usuário logado</h2>
+                }
             </div>
         </header>
     )
