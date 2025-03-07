@@ -61,7 +61,7 @@ function App() {
               rows="15"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="border-solid border-gray-300 text-2xl resize-none"
+              className="border-solid border-gray-300 text-2xl resize-none rounded-xl p-2"
               placeholder="Digite seu código"
               required
             ></textarea>
@@ -89,7 +89,7 @@ function App() {
           </Modal>
 
           {/* Listagem de Links */}
-          <div className="border-solid border-gray-200 w-full p-10">
+          <div className="border-solid overflow-y-auto border-gray-200 w-full p-10">
             <h2 className="text-4xl font-bold text-blue-500 m-0">
               Listagem de links
             </h2>
