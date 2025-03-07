@@ -20,9 +20,9 @@ const Header = () => {
             <div className="flex gap-4">
                 {token ? 
                 <>
-                    <h2>Usuário logado</h2>
-                    <br />
-                    <button onClick={logout}>Sair</button>
+                    <form action="https://drop-code.netlify.app">
+                        <input type="submit" onClick={logout} disabled={!localStorage.getItem("token")} value="Sair" />
+                    </form>
                 </>
                 :
                 <>
