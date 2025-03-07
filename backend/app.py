@@ -79,27 +79,42 @@ def login():
 @jwt_required(optional=True)  # Permite usuários logados e não logados
 def submit():
     try:
+        # Verifica se a requisição tem um JSON válido
         if not request.is_json:
             return jsonify({'error': 'Requisição inválida, JSON esperado'}), 400
 
         data = request.get_json()
+        print(f"Recebido JSON: {data}")
+
+        # Verifica se "text" foi enviado corretamente
         text = data.get('text')
         if not text:
-            return jsonify({'error': 'O campo "text" é obrigatório!'}), 422
+            return jsonify({'error': 'O campo "text" é obrigatório!'}), 422  # Alterado para 422
 
+        # Obtém o usuário logado (se houver)
         user_email = get_jwt_identity()
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
+        # Gera o link único para a página no frontend
         frontend_url = 'https://drop-code.netlify.app'
         page_id = str(uuid.uuid4())  
-        link_url = f'{frontend_url}/view/{page_id}'
+        link = f'{frontend_url}/view/{page_id}'
 
-        # Salvar o link e o texto no banco de dados
-        new_link = Link(url=link_url, text=text, user_id=user.id if user else None)
-        db.session.add(new_link)
-        db.session.commit()
+        # Se o usuário estiver logado, salva no banco de dados
+        if user:
+            try:
+                new_link = Link(url=link, user_id=user.id)
+                db.session.add(new_link)
+                db.session.commit()
+            except Exception as db_error:
+                db.session.rollback()
+                print(f"Erro ao salvar no banco: {db_error}")
+                return jsonify({'error': 'Erro ao salvar no banco'}), 500
 
-        return jsonify({'link': link_url})
+        print(f"🔗 Link gerado: {link}")
+        print(f"👤 Usuário logado: {user_email if user else 'Nenhum'}")
+
+        return jsonify({'link': link})  # Retorna o link gerado
 
     except Exception as e:
         print(f"Erro no backend: {str(e)}")
@@ -119,18 +134,18 @@ def get_user_links():
 
     return jsonify({'links': links_list}) 
 
-@app.route('/api/view/<page_id>', methods=['GET'])
+@app.route('/api/get_text/<page_id>', methods=['GET'])
 def get_text(page_id):
-    print(f"🔍 Buscando texto para page_id: {page_id}")  # Debugging
+    try:
+        link = Link.query.filter_by(id=page_id).first()  # Buscando pelo id gerado no banco
+        if not link:
+            return jsonify({'error': 'Link não encontrado'}), 404
 
-    link = Link.query.filter_by(url=f'https://drop-code.netlify.app/view/{page_id}').first()
+        return jsonify({'text': link.text}), 200  # Retorna o texto armazenado no banco de dados
 
-    if not link:
-        print("❌ Texto não encontrado!")
-        return jsonify({'error': 'Texto não encontrado'}), 404
-
-    print(f"✅ Texto encontrado: {link.text}")
-    return jsonify({'text': link.text})
+    except Exception as e:
+        print("Erro ao buscar link:", str(e))
+        return jsonify({'error': 'Erro interno no servidor'}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
