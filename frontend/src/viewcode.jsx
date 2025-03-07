@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Header from "./componentes/header";
 
 const ViewCode = () => {
   const { page_id } = useParams();
