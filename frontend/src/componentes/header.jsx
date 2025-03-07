@@ -2,6 +2,13 @@ import {useState} from "react";
 
 const Header = () => {
     const [token] = useState(localStorage.getItem("token") || "");
+
+    const logout = () => {
+        if (localStorage.getItem("token")) { // Verifica se o usuário está logado
+            localStorage.removeItem("token"); // Remove o token
+            alert("Você saiu da conta!");
+        }
+    };
     return(
         <header className="w-full h-28 bg-Backgrond flex justify-around place-items-center">
             <div className="flex gap-6 place-items-center">
@@ -12,7 +19,11 @@ const Header = () => {
             </div>
             <div className="flex gap-4">
                 {token ? 
-                <h2>Usuário logado</h2>
+                <>
+                    <h2>Usuário logado</h2>
+                    <br />
+                    <button onClick={logout}>Sair</button>
+                </>
                 :
                 <>
                     <form action="https://drop-code.netlify.app/login">
