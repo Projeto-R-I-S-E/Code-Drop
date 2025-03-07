@@ -89,7 +89,7 @@ function App() {
           </Modal>
 
           {/* Listagem de Links */}
-          <div className="border-solid h-92 overflow-y-auto border-gray-200 w-full p-10">
+          <div className="border-solid h-92 overflow-y-scroll border-gray-200 w-full p-10">
             <h2 className="text-4xl font-bold text-blue-500 m-0">
               Listagem de links
             </h2>
