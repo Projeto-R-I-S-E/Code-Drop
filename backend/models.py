@@ -20,6 +20,7 @@ class Link(db.Model):
     url = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=True)  # Referência ao usuário
     usuario = db.relationship('Usuario', backref=db.backref('links', lazy=True))
+    text = db.Column(db.Text, nullable=False)
 
     def __init__(self, url, user_id=None):
         self.url = url
