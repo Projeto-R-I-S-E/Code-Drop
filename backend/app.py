@@ -88,7 +88,6 @@ def submit():
 
         # Verifica se "text" foi enviado corretamente
         text = data.get('text')
-        print(f'texto recebido: {text}')
         if not text:
             return jsonify({'error': 'O campo "text" é obrigatório!'}), 422  # Alterado para 422
 
@@ -104,7 +103,7 @@ def submit():
         # Se o usuário estiver logado, salva no banco de dados
         if user:
             try:
-                new_link = Link(url=link, text=text, user_id=user.id)
+                new_link = Link(url=link, user_id=user.id)
                 db.session.add(new_link)
                 db.session.commit()
             except Exception as db_error:
