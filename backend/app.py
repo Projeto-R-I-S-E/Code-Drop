@@ -134,18 +134,18 @@ def get_user_links():
 
     return jsonify({'links': links_list}) 
 
-@app.route('/api/get_text/<page_id>', methods=['GET'])
+@app.route('/api/view/<page_id>', methods=['GET'])
 def get_text(page_id):
-    try:
-        link = Link.query.filter_by(id=page_id).first()  # Buscando pelo id gerado no banco
-        if not link:
-            return jsonify({'error': 'Link não encontrado'}), 404
+    print(f"🔍 Buscando texto para page_id: {page_id}")  # Debugging
 
-        return jsonify({'text': link.text}), 200  # Retorna o texto armazenado no banco de dados
+    link = Link.query.filter_by(url=f'https://drop-code.netlify.app/view/{page_id}').first()
 
-    except Exception as e:
-        print("Erro ao buscar link:", str(e))
-        return jsonify({'error': 'Erro interno no servidor'}), 500
+    if not link:
+        print("❌ Texto não encontrado!")
+        return jsonify({'error': 'Texto não encontrado'}), 404
+
+    print(f"✅ Texto encontrado: {link.text}")
+    return jsonify({'text': link.text})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 

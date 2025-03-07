@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import Header from './componentes/header'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-function ViewCode() {
-  const [text, setText] = useState(null);
-  const pageId = window.location.pathname.split('/').pop();  // Pega o page_id da URL
+const ViewCode = () => {
+  const { page_id } = useParams();
+  const [text, setText] = useState("");
 
   useEffect(() => {
     const fetchText = async () => {
       try {
-        const response = await fetch(`https://code-drop-production.up.railway.app/api/get_text/${pageId}`);
-        if (!response.ok) {
-          throw new Error('Página não encontrada');
-        }
+        const response = await fetch(`https://code-drop-production.up.railway.app/api/view/${page_id}`);
         const data = await response.json();
-        setText(data.text);
+
+        if (response.ok) {
+          setText(data.text);
+        } else {
+          setText("Erro ao carregar o texto.");
+        }
       } catch (error) {
-        console.error(error);
+        setText("Erro de conexão com o servidor.");
       }
     };
-    
+
     fetchText();
-  }, [pageId]);
+  }, [page_id]);
 
   return (
     <>
@@ -41,6 +43,6 @@ function ViewCode() {
       </div>
     </>
   );
-}
+};
 
 export default ViewCode;
