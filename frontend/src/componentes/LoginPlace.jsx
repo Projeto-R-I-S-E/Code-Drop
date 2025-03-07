@@ -28,8 +28,8 @@ const LoginPlace = () => {
         <div className='bg-white h-screen w-full flex flex-col justify-center items-center'> 
             {isUserLoggedIn() ? <p>Usuário Logado</p> : 
             <>
-            <main className="flex justify-center items-center flex-col gap-4 bg-blue-600 p-4 rounded-lg shadow-lg">
-                <p className='text-2xl font-sans font-bold text-white text-center'>Faça login</p>
+            <main className="flex flex-col justify-center items-center bg-blue-600 p-6 rounded-lg shadow-lg w-full max-w-md">
+                <p className=' font-bold font-sans text-white text-center mb-4 text-4xl'>Faça login</p>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 {error && <p className='text-red-500'>{error}</p>}
                     <input 
@@ -38,7 +38,7 @@ const LoginPlace = () => {
                         id="email"
                         required
                         placeholder="Digite seu email"
-                        className='border border-gray-300 rounded-md p-2 m-2'
+                        className='border border-gray-300 rounded-md p-2 m-2 h-6 w-96'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -48,16 +48,19 @@ const LoginPlace = () => {
                         id="senha" 
                         required 
                         placeholder='Digite sua senha'
-                        className='border border-gray-300 rounded-md p-2 m-2'
+                        className='border border-gray-300 rounded-md p-2 m-2 h-6 w-96'
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
                     />
                     <input 
                         type="submit" 
-                        className='text-blue-800 p-2 m-2 bg-white border border-blue-800 rounded-md '
-                        value="Enviar"
+                        className='text-blue-800 p-2 m-2 bg-white border border-blue-800 rounded-md w-80 self-center'
+                        value="Logar"
                     />
-                    <a href="https://drop-code.netlify.app/signup" className="bg-blue-700 text-white border border-white">Cadastre-se aqui</a>
+                    <p className='text-white text-center text-lg font-sans'>
+                        Não tem uma conta? 
+                        <a href="https://drop-code.netlify.app/signup" className=" text-white border border-white text-lg font-sans">Cadastre-se aqui</a>
+                    </p>
                 </form>
                 </main>
             </>
