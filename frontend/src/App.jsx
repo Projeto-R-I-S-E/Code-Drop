@@ -16,6 +16,7 @@ function App() {
     if (token) {
       fetchUserLinks();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchUserLinks = async () => {
