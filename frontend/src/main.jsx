@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/view/:page_id" element={<ViewCode />} />
+        <Route path="/view/:id" element={<ViewCode />} />
         <Route path="/login" element={<LoginPage />}/>
         <Route path='/signup' element={<SignUpPage />}/>
       </Routes>
