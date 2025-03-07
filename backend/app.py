@@ -104,7 +104,7 @@ def submit():
         # Se o usuário estiver logado, salva no banco de dados
         if user:
             try:
-                new_link = Link(url=link, user_id=user.id, text=text)
+                new_link = Link(url=link, user_id=user.id)
                 db.session.add(new_link)
                 db.session.commit()
             except Exception as db_error:
