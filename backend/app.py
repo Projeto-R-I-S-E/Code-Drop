@@ -79,42 +79,27 @@ def login():
 @jwt_required(optional=True)  # Permite usuários logados e não logados
 def submit():
     try:
-        # Verifica se a requisição tem um JSON válido
         if not request.is_json:
             return jsonify({'error': 'Requisição inválida, JSON esperado'}), 400
 
         data = request.get_json()
-        print(f"Recebido JSON: {data}")
-
-        # Verifica se "text" foi enviado corretamente
         text = data.get('text')
         if not text:
-            return jsonify({'error': 'O campo "text" é obrigatório!'}), 422  # Alterado para 422
+            return jsonify({'error': 'O campo "text" é obrigatório!'}), 422
 
-        # Obtém o usuário logado (se houver)
         user_email = get_jwt_identity()
         user = Usuario.query.filter_by(email=user_email).first() if user_email else None
 
-        # Gera o link único para a página no frontend
         frontend_url = 'https://drop-code.netlify.app'
         page_id = str(uuid.uuid4())  
-        link = f'{frontend_url}/view/{page_id}'
+        link_url = f'{frontend_url}/view/{page_id}'
 
-        # Se o usuário estiver logado, salva no banco de dados
-        if user:
-            try:
-                new_link = Link(url=link, text=text, user_id=user.id)
-                db.session.add(new_link)
-                db.session.commit()
-            except Exception as db_error:
-                db.session.rollback()
-                print(f"Erro ao salvar no banco: {db_error}")
-                return jsonify({'error': 'Erro ao salvar no banco'}), 500
+        # Salvar o link e o texto no banco de dados
+        new_link = Link(url=link_url, text=text, user_id=user.id if user else None)
+        db.session.add(new_link)
+        db.session.commit()
 
-        print(f"🔗 Link gerado: {link}")
-        print(f"👤 Usuário logado: {user_email if user else 'Nenhum'}")
-
-        return jsonify({'link': link})  # Retorna o link gerado
+        return jsonify({'link': link_url})
 
     except Exception as e:
         print(f"Erro no backend: {str(e)}")
