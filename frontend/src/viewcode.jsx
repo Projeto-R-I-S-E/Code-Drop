@@ -4,16 +4,16 @@ import Header from "./componentes/header";
 
 const ViewCode = () => {
   const { page_id } = useParams();
-  const [findtext, setText] = useState("");
+  const [text, setText] = useState("");
 
   useEffect(() => {
     const fetchText = async () => {
       try {
         const response = await fetch(`https://code-drop-production.up.railway.app/api/view/${page_id}`);
-        const text = await response.json();
+        const data = await response.json();
 
         if (response.ok) {
-          setText(text.findtext);
+          setText(data.text);
         } else {
           setText("Erro ao carregar o texto.");
         }
@@ -35,7 +35,7 @@ const ViewCode = () => {
               <input type="submit" value="Voltar" />
             </form>
             <h1>Código:</h1>
-            <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={findtext} readOnly
+            <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
             className="border-solid border-gray-300 text-2xl resize-none"></textarea>
           </>
         ) : (

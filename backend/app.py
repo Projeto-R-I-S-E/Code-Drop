@@ -138,13 +138,13 @@ def get_user_links():
 def get_text(page_id):
     print(f"🔍 Buscando texto para page_id: {page_id}")  # Debugging
 
-    text = request.json()
-    if not text:
+    data = request.json()
+    if not data:
         print("❌ Texto não encontrado!")
         return jsonify({'error': 'Texto não encontrado'}), 404
 
-    print(f"✅ Texto encontrado: {text}")
-    return jsonify({'text': text})
+    print(f"✅ Texto encontrado: {data}")
+    return jsonify({'text': data})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
