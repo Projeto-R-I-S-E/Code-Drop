@@ -17,6 +17,7 @@ const ViewCode = () => {
         } else {
           setText("Erro ao carregar o texto.");
         }
+      // eslint-disable-next-line no-unused-vars
       } catch (error) {
         setText("Erro de conexão com o servidor.");
       }
@@ -34,9 +35,9 @@ const ViewCode = () => {
             <form action="https://drop-code.netlify.app/">
               <input type="submit" value="Voltar" />
             </form>
-            <h1>Código:</h1>
+            <h1 className="text-black font-mono">Código:</h1>
             <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
-            className="border-solid border-gray-300 text-2xl resize-none"></textarea>
+            className="border-solid border-gray-200 text-2xl resize-none"></textarea>
           </>
         ) : (
           <p>Carregando...</p>
