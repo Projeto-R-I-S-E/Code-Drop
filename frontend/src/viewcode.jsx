@@ -32,16 +32,16 @@ const ViewCode = () => {
       <div className="container">
         {text ? (
           <>
-            <form action="https://drop-code.netlify.app/">
-              <input type="submit" value="Voltar" className="bg-blue-800 text-white border-2 border-white px-6 py-2 rounded-md cursor-pointer" />
-            </form>
             <h1 className="text-black font-mono">Código:</h1>
             <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
             className="border-solid border-gray-200 text-2xl resize-none"></textarea>
           </>
         ) : (
-          <p>Carregando...</p>
+          <p>Carregando...</p>          
         )}
+            <form action="https://drop-code.netlify.app/">
+              <input type="submit" value="Voltar" className="bg-blue-800 text-white border-2 border-white px-6 py-2 rounded-md cursor-pointer" />
+            </form>
       </div>
     </>
   );
