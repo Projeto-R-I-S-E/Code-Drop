@@ -73,6 +73,7 @@ def login():
 
     return jsonify({'error': 'Email ou senha inválidos!'}), 401
 
+textos_armazenados = {}
 
 #rotas para gerar urls
 @app.route('/api/submit', methods=['POST'])
@@ -114,6 +115,8 @@ def submit():
         print(f"🔗 Link gerado: {link}")
         print(f"👤 Usuário logado: {user_email if user else 'Nenhum'}")
 
+        textos_armazenados[page_id] = text
+
         return jsonify({'link': link})  # Retorna o link gerado
 
     except Exception as e:
@@ -138,14 +141,14 @@ def get_user_links():
 def get_text(id):
     print(f"🔍 Buscando texto para page_id: {id}")  # Debugging
 
-    link = Link.query.filter_by(url=f'https://drop-code.netlify.app/view/{id}').first()
+    text = textos_armazenados.get(id)
 
-    if not link:
+    if not text:
         print("❌ Texto não encontrado!")
         return jsonify({'error': 'Texto não encontrado'}), 404
 
-    print(f"✅ Texto encontrado: {link.text}")
-    return jsonify({'text': link.text})
+    print(f"✅ Texto encontrado: {text}")
+    return jsonify({'text': text})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
