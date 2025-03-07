@@ -18,6 +18,7 @@ class Link(db.Model):
     __tablename__ = 'links'
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid4()))  # Usando UUID
     url = db.Column(db.String(255), nullable=False)
+    text = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=True)  # Referência ao usuário
     usuario = db.relationship('Usuario', backref=db.backref('links', lazy=True))
 
