@@ -88,6 +88,7 @@ def submit():
 
         # Verifica se "text" foi enviado corretamente
         text = data.get('text')
+        print(f'texto recebido: {text}')
         if not text:
             return jsonify({'error': 'O campo "text" é obrigatório!'}), 422  # Alterado para 422
 
