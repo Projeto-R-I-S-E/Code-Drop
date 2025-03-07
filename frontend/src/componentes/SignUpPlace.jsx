@@ -18,7 +18,7 @@ const SignUpPlace = () => {
     }
 
     return (
-        <div className='bg-white h-screen w-full flex flex-col justify-center items-center'> 
+        <div className='bg-white h-screen w-full flex flex-col mt-28 items-center'> 
             <main className="flex flex-col justify-center items-center bg-blue-600 p-6 rounded-lg shadow-lg w-full max-w-md">
                 <p className='font-bold font-sans text-white text-center mb-4 text-4xl'>Sign up</p>
 
