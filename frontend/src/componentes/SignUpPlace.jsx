@@ -38,6 +38,7 @@ const SignUpPlace = () => {
                         className="border border-gray-300 rounded-md p-2 m-2"
 
                     />
+                    
                     <input 
                         type="email" 
                         name="email" 
