@@ -33,7 +33,7 @@ const ViewCode = () => {
         {text ? (
           <>
             <form action="https://drop-code.netlify.app/">
-              <input type="submit" value="Voltar" />
+              <input type="submit" value="Voltar" className="bg-blue-800 text-white border-2 border-white px-6 py-2 rounded-md cursor-pointer" />
             </form>
             <h1 className="text-black font-mono">Código:</h1>
             <textarea name="returnedCode" id="returnedCode" cols="70" rows="15" value={text} readOnly
